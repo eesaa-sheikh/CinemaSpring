@@ -28,12 +28,13 @@ public class MovieServices {
 
 
     public Movie addMovie (Movie movie){
-        return this.addMovie(movie);
+        movieRepository.save(movie);
+        return movie;
 
     }
 
-    public Movie getMovieById(int id){
-        return movieRepository.findById(id).get();
+    public Optional<Movie> getMovieById(int id){
+        return movieRepository.findById(id);
     }
 
     public List<Movie>getAllMovies(){

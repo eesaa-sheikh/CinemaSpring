@@ -8,22 +8,22 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.ClientInfoStatus;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/movies")
+@RequestMapping(value = "/movies")
 public class MovieController {
 
     @Autowired
     MovieServices movieServices;
 
-//    @PostMapping
-//    public ResponseEntity<MovieStart> loadingMovie() {
-//        MovieStart movieStart = movieServices.MovieServices();
-//        return new ResponseEntity<>(movieStart, HttpStatus.CREATED);
-//
-//    }
+    @PostMapping
+    public ResponseEntity<Movie> newMovie(@RequestBody Movie movie){
+        movieServices.addMovie(movie);
+        return new ResponseEntity<>(movie,HttpStatus.CREATED);
+    }
 
     @GetMapping
     public ResponseEntity<List<Movie>> getAllMovies() {
@@ -33,12 +33,13 @@ public class MovieController {
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<Movie> getMovieById(@PathVariable int id) {
-        Movie movie = movieServices.getMovieById(id);
-//        if (movies.isPresent()){
-            return new ResponseEntity<>(movie, HttpStatus.OK);
-//        } else {
-//            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-//        }
+        Optional<Movie> movie = movieServices.getMovieById(id);
+        if (movie.isPresent()){
+            return new ResponseEntity<>(movie.get(), HttpStatus.OK);
+         } else {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+        //Everything is done
     }
 }
 
